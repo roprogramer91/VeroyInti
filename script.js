@@ -49,22 +49,13 @@ const CONFIG = {
 
   /* =========================
      ICONOS POR SECCIÓN
-     Podés poner:
-       - inline: string con el <svg> completo (ideal para recolor con CSS)
-       - url: ruta a .svg/.png (no se puede recolorear por CSS)
-       - variant: atajo para usar uno de los SVG base
      ========================= */
   icons: {
-    // "calendar" o "clock" (si null => calendar)
     fecha:      { inline: null, url: "icons/calendar.svg",  variant: "calendar" },
-    // confeti
     lugares:    { inline: null, url: "icons/confetti.svg",  variant: "party"    },
-    // traje + vestido (alias "suit" agregado abajo)
     vestimenta: { inline: null, url: "icons/suit.svg",      variant: "suit"     },
-    // cara de bebé
     ninos:      { inline: null, url: "icons/baby.svg",      variant: "baby"     },
-    // "heart" o "check"
-    rsvp:       { inline: null, url: "icons/rsvp.svg",        variant: "heart"    }
+    rsvp:       { inline: null, url: "icons/rsvp.svg",      variant: "heart"    }
   }
 };
 
@@ -112,11 +103,12 @@ const CONFIG = {
 
 /* =========================
    FONDOS POR SECCIÓN (data-bg / data-bg-mobile / data-veil)
+   (ahora también incluye al footer porque matchea .snap-child)
    ========================= */
 (function applyBackgrounds(){
   const isMobile = window.matchMedia("(max-width: 640px)").matches;
 
-  document.querySelectorAll(".section[data-bg], .section[data-bg-mobile]").forEach(sec=>{
+  document.querySelectorAll(".snap-child[data-bg], .snap-child[data-bg-mobile]").forEach(sec=>{
     const urlMobile = sec.getAttribute("data-bg-mobile");
     const url = (isMobile && urlMobile) ? urlMobile : sec.getAttribute("data-bg");
     const veil = parseFloat(sec.getAttribute("data-veil") || "0.06");
@@ -146,11 +138,10 @@ const CONFIG = {
    ICONOS POR SECCIÓN (SVG inline o URL)
    ========================= */
 (function injectSectionIcons(cfg){
-  // Helper: setea tamaños/colores por data-atributos
   const applyHostStylesFromData = (host) => {
     if (!host) return;
-    const sz = host.getAttribute("data-size");    // número (px) o con unidad
-    const col = host.getAttribute("data-color");  // por ej. #bc8a02
+    const sz = host.getAttribute("data-size");
+    const col = host.getAttribute("data-color");
     if (sz){
       const hasUnit = /[a-z%]+$/i.test(sz);
       host.style.setProperty("--icon-size", hasUnit ? sz : `${sz}px`);
@@ -160,24 +151,19 @@ const CONFIG = {
     }
   };
 
-  // Helper: monta en host un inline SVG o una imagen URL
   const mount = (hostId, srcOrHtml) => {
     const host = document.getElementById(hostId);
     if (!host || !srcOrHtml) return;
 
     const txt = String(srcOrHtml).trim();
     if (txt.startsWith("<")) {
-      // SVG embebido (usa currentColor desde CSS)
-      host.innerHTML = txt;
+      host.innerHTML = txt;       // inline SVG
     } else {
-      // Archivo externo (svg/png). No se recolorea por CSS.
       host.innerHTML = `<img src="${txt}" alt="" loading="lazy" decoding="async">`;
     }
-
     applyHostStylesFromData(host);
   };
 
-  // SVGs base (dorados via currentColor)
   const svgs = {
     calendar: `
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -204,10 +190,8 @@ const CONFIG = {
     `,
     outfits: `
       <svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <!-- Traje -->
         <path d="M6 20l3-11 3-2h4l3 2 3 11H6z"></path>
         <path d="M16 7l-2 3 2 3 2-3-2-3z" fill="currentColor" stroke="none"></path>
-        <!-- Vestido -->
         <path d="M30 6l2-2 2 2-2 3-2-3z" fill="currentColor" stroke="none"></path>
         <path d="M26 20l3-9h6l3 9H26z"></path>
       </svg>
@@ -232,8 +216,6 @@ const CONFIG = {
       </svg>
     `
   };
-
-  // Alias para variant "suit" -> usar el ícono base "outfits"
   svgs.suit = svgs.outfits;
 
   const pick = (cfgItem, fallback) => {
@@ -244,15 +226,10 @@ const CONFIG = {
     return fallback;
   };
 
-  // Fecha
   mount("icon-fecha",      pick(cfg.icons.fecha,      svgs.calendar));
-  // Lugares
   mount("icon-lugares",    pick(cfg.icons.lugares,    svgs.party));
-  // Vestimenta
   mount("icon-vestimenta", pick(cfg.icons.vestimenta, svgs.outfits));
-  // Niños
   mount("icon-ninos",      pick(cfg.icons.ninos,      svgs.baby));
-  // RSVP
   mount("icon-rsvp",       pick(cfg.icons.rsvp,       svgs.heart));
 })(CONFIG);
 
@@ -364,6 +341,53 @@ document.addEventListener('DOMContentLoaded', () => {
   if (bg) bg.classList.add('kenburns');
 });
 
+/* =========================
+   Ken Burns en el FOOTER
+   ========================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const root   = document.getElementById('snap');
+  const footer = document.getElementById('pie');
+  if (!root || !footer) return;
+
+  // crear/reusar capa de fondo independiente para animar
+  let fbg = footer.querySelector('.footer-bg');
+  if (!fbg){
+    fbg = document.createElement('div');
+    fbg.className = 'footer-bg';
+    // que quede detrás del contenido
+    footer.prepend(fbg);
+  }
+
+  // tomar la misma imagen declarada en data-bg / data-bg-mobile
+  const isMobile = window.matchMedia("(max-width: 640px)").matches;
+  const urlMobile = footer.getAttribute("data-bg-mobile");
+  const url = (isMobile && urlMobile) ? urlMobile : footer.getAttribute("data-bg");
+  if (url) fbg.style.backgroundImage = `url('${url}')`;
+
+  // arrancar animación
+  fbg.classList.add('kenburns');
+
+  // reiniciar animación cada vez que el footer vuelve a ocupar casi toda la vista
+  if ('IntersectionObserver' in window){
+    const restart = () => {
+      fbg.classList.remove('kenburns');
+      void fbg.offsetWidth; // reflow
+      fbg.classList.add('kenburns');
+    };
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if (entry.isIntersecting && entry.intersectionRatio > 0.95){
+          restart();
+        }
+      });
+    }, { root, threshold: [0.95] });
+    io.observe(footer);
+  }
+});
+
+/* =========================
+   Reinicio de Ken Burns al reentrar portada
+   ========================= */
 (function(){
   const root = document.getElementById('snap');
   const section = document.getElementById('inicio');
