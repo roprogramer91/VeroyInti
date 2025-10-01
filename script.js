@@ -40,9 +40,9 @@ const CONFIG = {
   // WhatsApp (usar 54 + código de área sin 0 + número sin 15)
   whatsapp: {
     veroNumber: "5491152617410",
-    intiNumber: "5491100000000",
-    messageVero: "Hola Vero, confirmo mi asistencia a la boda 💍",
-    messageInti: "Hola Inti, confirmo mi asistencia a la boda 💍",
+    intiNumber: "5491150264999",
+    messageVero: "Hola Vero, confirmo mi asistencia a la boda",
+    messageInti: "Hola Inti, confirmo mi asistencia a la boda",
     btnVeroText: "Escribir a Vero",
     btnIntiText: "Escribir a Inti"
   },
