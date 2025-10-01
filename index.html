@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vero & Inti — Invitación</title>
+  <meta name="description" content="Invitación boda civil de Vero & Inti — 24 octubre del 2025" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+
+  <!-- Favicon para evitar 404 -->
+  <link rel="icon" href="favicon.ico" />
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Preload portada para mejorar LCP -->
+  <link rel="preload" as="image" href="hero.jpg" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- CONTENEDOR SNAP -->
+  <main id="snap" class="snap-container" tabindex="0" aria-label="Invitación Vero e Inti">
+
+    <!-- PORTADA (Sección 1) -->
+    <header class="hero snap-child" id="inicio" data-next="frase" aria-label="Portada">
+      <div class="hero-bg" role="img" aria-label="Foto de portada"></div>
+      <div class="overlay" aria-hidden="true"></div>
+
+      <div class="hero-content container">
+        <p class="kicker" id="kicker">¡Nos casamos!</p>
+        <h1 class="couple" id="couple">Vero <span class="amp">&</span> Inti</h1>
+      </div>
+
+      <a href="#frase" class="scroll-down" aria-label="Ir a la frase">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- FRASE (Sección 2) -->
+    <section
+      class="section snap-child"
+      id="frase"
+      data-next="fecha"
+      data-bg="fondo1.png"
+      data-veil="0.06"
+      aria-label="Frase romántica">
+      <div class="container narrow">
+        <blockquote class="quote">
+          <p id="quote-text">
+            La historia comienza cuando dos personas que ni soñaban conocerse
+            terminan encontrándose en el instante menos esperado, pero en el momento indicado.
+          </p>
+        </blockquote>
+      </div>
+
+      <a href="#fecha" class="scroll-down" aria-label="Ir a la fecha">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- FECHA + COUNTDOWN (Sección 3) -->
+    <section
+      class="section snap-child"
+      id="fecha"
+      data-next="lugares"
+      data-bg="fondo2.png"
+      data-veil="0.10"
+      aria-label="Fecha y cuenta regresiva">
+
+      <!-- ICONO (ahora con clase "icon" y tamaño por data-size) -->
+      <div class="section-icon icon" id="icon-fecha" data-size="40" aria-hidden="true"></div>
+
+      <div class="container narrow">
+        <h2 class="title" id="date-title">24 octubre del 2025</h2>
+
+        <div class="countdown" 
+             id="countdown"
+             data-target="2025-10-24T12:00:00"
+             data-offset="-03:00"
+             aria-live="polite">
+          <div class="cd-item"><span id="cd-days">—</span><small>días</small></div>
+          <div class="cd-item"><span id="cd-hours">—</span><small>horas</small></div>
+          <div class="cd-item"><span id="cd-mins">—</span><small>min</small></div>
+          <div class="cd-item"><span id="cd-secs">—</span><small>seg</small></div>
+        </div>
+      </div>
+
+      <a href="#lugares" class="scroll-down" aria-label="Ir a lugares">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- LUGARES (Sección 4) -->
+    <section
+      class="section snap-child"
+      id="lugares"
+      data-next="vestimenta"
+      data-bg="fondo3.png"
+      data-veil="0.08"
+      aria-label="Ceremonia y festejo">
+
+      <!-- ICONO -->
+      <div class="section-icon icon" id="icon-lugares" data-size="40" aria-hidden="true"></div>
+
+      <div class="container">
+        <h2 class="title">Ceremonia & Festejo</h2>
+
+        <div class="cards">
+          <article class="card">
+            <h3 class="card-title">Ceremonia civil</h3>
+            <p class="time-place">
+              <strong>Hora:</strong> <span id="ceremony-time">12:00</span><br>
+              <strong>Lugar:</strong> <span id="ceremony-place">Registro Civil (Dirección exacta)</span>
+            </p>
+          </article>
+
+          <article class="card">
+            <h3 class="card-title">Festejo</h3>
+            <p class="time-place">
+              <strong>Hora:</strong> <span id="party-time">19:30</span><br>
+              <strong>Lugar:</strong> <span id="party-place">Dpto. de Maya — Patio (Dirección exacta)</span>
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <a href="#vestimenta" class="scroll-down" aria-label="Ir a vestimenta">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- VESTIMENTA (Sección 5) -->
+    <section
+      class="section snap-child"
+      id="vestimenta"
+      data-next="ninos"
+      data-bg="fondo7.png"
+      data-veil="0.06"
+      aria-label="Código de vestimenta">
+
+      <!-- ICONO -->
+      <div class="section-icon icon" id="icon-vestimenta" data-size="40" aria-hidden="true"></div>
+
+      <div class="container narrow">
+        <h2 class="title">Código de vestimenta</h2>
+        <div class="dress">
+          <span class="dress-badge" id="dress-code">Semi-formal</span>
+          <p class="dress-note" id="dress-note">Colores libres, evitá blanco total</p>
+        </div>
+      </div>
+
+      <a href="#ninos" class="scroll-down" aria-label="Ir al aviso sin niños">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- SIN NIÑOS (Sección 6) -->
+    <section
+      class="section snap-child"
+      id="ninos"
+      data-next="rsvp"
+      data-bg="fondo5.png"
+      data-veil="0.06"
+      aria-label="Aviso sin niños">
+
+      <!-- ICONO -->
+      <div class="section-icon icon" id="icon-ninos" data-size="40" aria-hidden="true"></div>
+
+      <div class="container narrow">
+        <p class="notice" id="notice-text">
+          Con mucho cariño, les pedimos que este encuentro sea <strong>solo para adultos</strong>.
+          Gracias por comprender y ayudarnos a disfrutar una noche tranquila.
+        </p>
+      </div>
+
+      <a href="#rsvp" class="scroll-down" aria-label="Ir a confirmar asistencia">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- CONFIRMACIÓN (Sección 7) -->
+    <section
+      class="section snap-child"
+      id="rsvp"
+      data-bg="fondo6.png"
+      data-veil="0.06"
+      aria-label="Confirmar asistencia">
+
+      <!-- ICONO -->
+      <div class="section-icon icon" id="icon-rsvp" data-size="40" aria-hidden="true"></div>
+
+      <div class="container narrow">
+        <h2 class="title">Confirmar asistencia</h2>
+        <p class="sub">¡Nos hace muy felices contar con vos! Elegí a quién avisar por WhatsApp:</p>
+
+        <div class="rsvp-buttons">
+          <a class="btn" id="btn-vero"
+             href="https://wa.me/5491100000000?text=Hola%20Vero%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%20el%2024%20de%20octubre%20%F0%9F%92%8D" 
+             target="_blank" rel="noopener">
+            Escribir a Vero
+          </a>
+          <a class="btn outline" id="btn-inti"
+             href="https://wa.me/5491100000000?text=Hola%20Inti%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%20el%2024%20de%20octubre%20%F0%9F%92%8D" 
+             target="_blank" rel="noopener">
+            Escribir a Inti
+          </a>
+        </div>
+      </div>
+      <!-- La última sección no muestra flecha (el script la oculta por si queda) -->
+    </section>
+
+    <footer class="footer snap-child" id="pie" aria-label="Pie">
+      <div class="container">
+        <p>Vero <span>&</span> Inti • 24/10/2025</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <noscript>
+    <p style="padding:1rem;text-align:center">Por favor, activá JavaScript para ver la invitación correctamente.</p>
+  </noscript>
+
+  <script src="script.js"></script>
+</body>
+</html>

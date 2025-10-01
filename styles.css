@@ -1,0 +1,381 @@
+/* =========================
+   Variables & Base
+   ========================= */
+:root{
+  --bg:#ffffff;
+  --fg:#1a1a1a;
+  --muted:#6b7280;
+  --gold:#bc8a02;
+  --gold-soft:#e6c766;
+  --blue:#4ea8de;
+  --veil:rgba(0,0,0,.35);
+  --card:#ffffff;
+  --border:#ececec;
+
+  --space-1: clamp(6px, 0.6vw, 8px);
+  --space-2: clamp(10px, 0.9vw, 12px);
+  --space-3: clamp(14px, 1.2vw, 16px);
+  --space-4: clamp(18px, 1.8vw, 24px);
+  --space-5: clamp(28px, 3vw, 40px);
+  --space-6: clamp(48px, 6vw, 72px);
+
+  --radius-s: 12px;
+  --radius-m: 16px;
+  --shadow-1: 0 2px 10px rgba(0,0,0,.06);
+
+  /* Para fundir el fade de la portada con la siguiente sección */
+  --section-bg:#ffe8a359;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--fg);
+  background:var(--bg);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow:hidden; /* scrollea solo el contenedor snap */
+}
+
+/* =========================
+   SNAP por secciones
+   ========================= */
+.snap-container{
+  height:100svh;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  scroll-behavior:smooth;
+}
+.snap-child{
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  min-height:100svh;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* =========================
+   Layout utils
+   ========================= */
+.container{max-width:1100px;margin-inline:auto;padding-inline:clamp(14px,4vw,28px)}
+.container.narrow{max-width:780px}
+.section{padding-block:var(--space-6)}
+.section.soft{background-color:#faf9f6} /* color, no shorthand */
+
+/* Aire exterior para el contenido de las secciones (no portada) */
+.section.snap-child{
+  padding-inline: clamp(14px, 4.5vw, 28px);
+}
+
+/* =========================
+   Fondos por sección (data-bg / data-veil se setean desde JS)
+   ========================= */
+.section{
+  --bg-image: none;  /* url('...') desde JS */
+  --bg-veil: .06;    /* opacidad del velo blanco desde JS */
+  background-image:
+    linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,var(--bg-veil))),
+    var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll; /* iOS friendly */
+}
+@media (hover:hover) and (pointer:fine){
+  .section{ background-attachment: fixed; } /* parallax suave en desktop */
+}
+
+/* =========================
+   Tipografía
+   ========================= */
+.title{
+  font-family:"Cormorant Garamond",serif;
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(22px,2.8vw,36px);
+  text-align:center;
+  margin:0 0 var(--space-2);
+  color:#111;
+}
+.sub{text-align:center;color:var(--muted);margin:0 0 var(--space-4)}
+
+/* =========================
+   HERO (portada)
+   ========================= */
+.hero{
+  position:relative; /* para el ::after del fade */
+  overflow:hidden;
+  text-align:center;
+}
+.hero-bg{
+  position:absolute; inset:0;
+  background:url('hero.jpg') center/cover no-repeat;
+  filter:saturate(1.02) contrast(1.02);
+  transform: scale(1);
+  transform-origin: center center;
+  backface-visibility: hidden;
+  will-change: transform;
+  z-index:0;
+}
+.overlay{
+  position:absolute; inset:0;
+  background: linear-gradient(to bottom,rgba(0,0,0,.18),rgba(0,0,0,.55)), var(--veil);
+  z-index:1;
+}
+.hero-content{position:relative;color:#fff;padding-inline:var(--space-3); z-index:4;}
+.kicker{letter-spacing:.18em;text-transform:uppercase;font-size:clamp(.78rem,1.6vw,.95rem);opacity:.95;margin:0 0 var(--space-1)}
+.couple{
+  font-family:"Great Vibes",cursive;
+  font-weight:400;
+  font-size:clamp(52px,10vw,108px);
+  letter-spacing:.5px;
+  line-height:1.05;
+  margin:0 0 var(--space-1)
+}
+.couple span{color:var(--gold);filter:drop-shadow(0 1px 0 rgba(0,0,0,.05))}
+.date-inline{font-weight:400;font-size:clamp(.95rem,2.4vw,1.05rem);opacity:.9;border-top:1px solid rgba(255,255,255,.25);display:inline-block;padding-top:var(--space-1)}
+
+/* ==== Fade blanco al pie de la portada ==== */
+.hero::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height: clamp(160px, 28svh, 420px);
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.75) 55%,
+    var(--section-bg) 0.5%
+  );
+  z-index:2;  /* sobre overlay, debajo de texto */
+  pointer-events:none;
+}
+@supports (-webkit-mask-image: linear-gradient(#000,#000)){
+  .hero::after{
+    background: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 60%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 60%, #000 100%);
+    background: var(--section-bg);
+  }
+}
+
+/* =========================
+   Flecha reutilizable
+   ========================= */
+.scroll-down{
+  position:absolute;
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  left:50%; translate:-50% 0;
+  color:#fff; opacity:.92; text-decoration:none;
+  width:44px;height:44px;border-radius:999px;
+  display:grid;place-items:center;
+  background:transparent;
+  z-index:4;
+}
+.scroll-down svg{display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+.scroll-down{animation:bounce 2.4s infinite ease-in-out}
+@media(prefers-reduced-motion:reduce){.scroll-down{animation:none}}
+.section .scroll-down{ color:var(--gold) }
+.section.soft .scroll-down{ color:var(--gold) }
+
+/* =========================
+   Frase
+   ========================= */
+.quote{
+  position:relative;
+  font-size:clamp(1rem,2.2vw,1.2rem);
+  text-align:center;
+  margin:0;
+  color:#333;
+  padding-inline:var(--space-1);
+  padding-top:clamp(24px,4vw,32px);
+}
+.quote::before{
+  content:"“";
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:"Cormorant Garamond",serif;
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(40px,6vw,56px);
+  line-height:1;
+  color:var(--gold-soft);
+  -webkit-user-select:none;
+  user-select:none;
+  pointer-events:none;
+}
+.quote p{
+  margin:0;
+  font-family:"Cormorant Garamond",serif;
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.05rem,2.5vw,1.35rem);
+}
+
+/* =========================
+   Countdown
+   ========================= */
+.countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-2);justify-items:stretch;margin:var(--space-3) 0 var(--space-1)}
+.cd-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-m);padding:clamp(10px,2.6vw,16px);text-align:center;box-shadow:var(--shadow-1)}
+.cd-item span{display:block;font-variant-numeric:tabular-nums;font-size:clamp(20px,5.5vw,34px);font-weight:700;color:#111}
+.cd-item small{color:var(--muted);font-size:clamp(.72rem,2vw,.85rem)}
+@media(max-width:420px){.countdown{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hint{color:var(--muted);text-align:center;font-size:.9rem;padding-inline:var(--space-2)}
+
+/* =========================
+   Cards Lugares
+   ========================= */
+.cards{display:grid;gap:var(--space-2);grid-template-columns:1fr}
+@media(min-width:680px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-m);padding:var(--space-3);box-shadow:var(--shadow-1)}
+.card-title{margin:0 0 var(--space-1);font-size:clamp(1.05rem,2.4vw,1.2rem);font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:8px}
+.card-title::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-left:8px;opacity:.6}
+.time-place{margin:.25rem 0 0;color:#333;line-height:1.6}
+
+/* =========== Vestimenta =========== */
+.dress{
+  text-align:center;
+  display:grid;
+  gap: var(--space-2);
+  justify-items:center;
+  margin-top: var(--space-2);
+}
+.dress-badge{
+  display:inline-flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold);
+  background:
+    linear-gradient(180deg, #fff, #fff8e0 38%, #fff 100%);
+  color:#7a5d12;
+  font-weight:600;
+  box-shadow: 0 8px 20px rgba(212,175,55,.18),
+              0 2px 6px rgba(0,0,0,.06);
+}
+.dress-note{
+  margin:0;
+  color: var(--muted);
+  font-size: .95rem;
+  word-break: break-word;
+}
+
+/* =========================
+   Aviso sin niños
+   ========================= */
+.notice{text-align:center;margin:0;background:#fff9e9;border:1px solid #ffe8a3;color:#674d00;padding:var(--space-3);border-radius:var(--radius-m);box-shadow:var(--shadow-1)}
+.notice strong{color:#3d2f00}
+
+/* =========================
+   Botones / RSVP
+   ========================= */
+.btn{
+  display:inline-block;border-radius:999px;padding:12px 20px;min-height:44px;
+  border:2px solid var(--gold);
+  background:linear-gradient(180deg,var(--gold),#c7ae68);
+  color:#fff;text-decoration:none;font-weight:600;
+  transition:transform .08s ease,box-shadow .2s ease,opacity .2s ease;
+  box-shadow:0 6px 18px rgba(212,175,55,.28);text-align:center
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.outline{background:#fff;color:#7a5d12;border-color:var(--gold)}
+.rsvp-buttons{display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap}
+.rsvp-buttons .btn{flex:1 1 220px;max-width:320px}
+
+/* =========================
+   Footer
+   ========================= */
+.footer{text-align:center;color:#666;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.footer span{color:var(--gold)}
+
+/* =========================
+   Iconos por sección (dorados, SVG inline o URL)
+   ========================= */
+/* Ahora el tamaño se controla con --icon-size.
+   El JS setea --icon-size desde data-size si lo ponés en el HTML.
+   Si no, queda este valor por defecto. */
+.section .section-icon{
+  --icon-color: var(--gold);
+  --icon-size: clamp(38px, 5vw, 52px); /* tamaño por defecto */
+  color: var(--icon-color);
+  width: var(--icon-size);
+  height: var(--icon-size);
+  display:grid;
+  place-items:center;
+  margin: clamp(18px, 3.6vw, 28px) auto clamp(10px, 2.2vw, 16px);
+  opacity: .96;
+}
+.section .section-icon svg,
+.section .section-icon img{
+  width: 100%;
+  height: 100%;
+  display:block;
+  object-fit: contain;
+}
+/* (Opcional) si el icono es PNG y querés un tinte aproximado:
+.section .section-icon img{
+  filter: sepia(1) saturate(3) hue-rotate(345deg) brightness(0.95);
+} */
+
+/* =========================
+   Ken Burns (zoom lento)
+   ========================= */
+.hero-bg.kenburns{
+  animation: hero-zoom-in 18s ease-out forwards;
+}
+@keyframes hero-zoom-in{
+  0%   { transform: scale(1) translate3d(0,0,0) }
+  100% { transform: scale(1.18) translate3d(0,-6px,0) } /* intensidad del zoom */
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-bg.kenburns{ animation: none }
+}
+
+/* =========================
+   Dark mode opcional
+   ========================= */
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0f0f10;--fg:#f1f1f1;--muted:#a1a1a1;--card:#161618;--border:#26262a;--veil:rgba(0,0,0,.45)}
+  .title{color:#fafafa}
+  .quote{color:#e7e7e7}
+  .notice{background:#1a1710;border-color:#58491f;color:#f6e4b6}
+  .time-place{color:#e1e1e1}
+  .footer{color:#a8a8a8}
+}
+
+
+#icon-vestimenta{ width: 130px;; height:130px; }
+#icon-vestimenta svg,
+#icon-vestimenta img{ width:100%; height:100%; }
+
+#icon-lugares{ width: 100px; height:100px; }
+#icon-lugares svg,
+#icon-lugares img{ width:100%; height:100%; }
+
+#icon-ninos{ width: 100px; height:100px; } 
+#icon-ninos svg,
+#icon-ninos img{ width:100%; height:100%; }
+
+#icon-fecha{ width: 86px; height:86px; }
+#icon-fecha svg,
+#icon-fecha img{ width:100%; height:100%; }
+
+#icon-rsvp{ width: 100px; height:100px; }
+#icon-rsvp svg,
+#icon-rsvp img{ width:100%; height:100%; }
+
+.amp{ color: var(--gold); }
+/* =========================
+   FIN
+   ========================= */
