@@ -50,7 +50,7 @@ const CONFIG = {
 
   maps: {
   ceremony: "https://www.google.com/maps/place/Registro+Civil+Caballito/@-34.6059176,-58.4332021,19.25z/data=!4m6!3m5!1s0x95bcca6eeafb4bf3:0xfbb3488782f0459c!8m2!3d-34.6058264!4d-58.4328144!16s%2Fg%2F11flt2yfms?entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D",
-  
+
   party:    "https://www.google.com/maps/place/Guardia+Vieja+3732,+C1192+Cdad.+Aut%C3%B3noma+de+Buenos+Aires/@-34.6014386,-58.4180171,18z/data=!3m1!4b1!4m6!3m5!1s0x95bcca89e7441971:0xc077e8274bee4d35!8m2!3d-34.6014405!4d-58.4169345!16s%2Fg%2F11cph0n6cc?entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D" // reemplazá por el real
 },
 
@@ -538,4 +538,53 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.hidden) audio.pause();
     // opcional: no reanudar solo; el usuario toca otra vez si quiere
   });
+})();
+
+
+// ========= Brillantina reusable =========
+(function glitterInit(){
+  function mountGlitter(containerId, count = 24){
+  const host = document.getElementById(containerId);
+  if (!host) return;
+
+  host.innerHTML = ""; // limpiar
+
+  const w = host.clientWidth  || host.offsetWidth  || 360;
+  const h = host.clientHeight || host.offsetHeight || 640;
+
+  for (let i = 0; i < count; i++){
+    const s = document.createElement('div');
+    s.className = 's';
+
+    // posición inicial aleatoria
+    const x = Math.random() * 100;         // %
+    const y = Math.random() * 100;         // %
+    const sz = 4 + Math.random() * 6;      // px
+
+    // tiempos
+    const dur    = 6 + Math.random() * 6;  // 6–12s
+    const delay  = Math.random() * 4;      // 0–4s
+    const twdl   = Math.random() * 1.5;    // 0–1.5s
+
+    // deriva lateral suave (px)
+    const dxStart = (Math.random()*2 - 1) * 10;  // -10..10
+    const dxEnd   = dxStart + (Math.random()*2 - 1) * 14; // cambia un poco
+
+    // aplicar variables CSS
+    s.style.setProperty('--x',  `${x}%`);
+    s.style.setProperty('--y',  `${y}%`);
+    s.style.setProperty('--sz', `${sz}px`);
+    s.style.setProperty('--dur',    `${dur}s`);
+    s.style.setProperty('--delay',  `${delay}s`);
+    s.style.setProperty('--twdelay',`${twdl}s`);
+    s.style.setProperty('--dxInicio', `${dxStart}px`);
+    s.style.setProperty('--dxFin',    `${dxEnd}px`);
+
+    host.appendChild(s);
+  }
+}
+
+  // Portada y footer (podés cambiar la cantidad)
+  mountGlitter('glitter-hero',   26);
+  mountGlitter('glitter-footer', 26);
 })();
