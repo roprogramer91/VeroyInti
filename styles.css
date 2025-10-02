@@ -505,6 +505,58 @@ body{
 }
 
 
+/* ========= Glitter (brillantina) ========= */
+.glitter{
+  position:absolute; inset:0;
+  pointer-events:none;
+  z-index:2;                  /* sobre bg/overlay, debajo del texto */
+  overflow:hidden; contain:paint;
+  mix-blend-mode: screen;
+}
+
+/* El contenedor .s se mueve (flota) */
+.glitter .s{
+  position:absolute;
+  left:var(--x, 50%); top:var(--y, 50%);
+  width:var(--sz, 6px); height:var(--sz, 6px);
+  transform: translate(-50%, -50%);
+  /* movimiento suave + deriva lateral aleatoria */
+  animation: glitter-float var(--dur, 8s) linear var(--delay,0s) infinite;
+  will-change: transform, opacity;
+}
+
+/* El puntito real vive en ::before y titila/escala */
+.glitter .s::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:999px;
+  background:
+    radial-gradient(circle at 30% 30%, #fff 0 28%, rgba(255,255,255,.65) 29% 55%, transparent 56%),
+    radial-gradient(circle, rgba(188,138,2,.95), rgba(188,138,2,.2));
+  filter: drop-shadow(0 0 4px rgba(255,215,130,.6));
+  opacity:.85;
+  animation: glitter-twinkle 1.6s ease-in-out var(--twdelay,0s) infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes glitter-float{
+  /* usamos --dxInicio / --dxFin para una deriva lateral leve */
+  0%   { transform: translate(calc(-50% + var(--dxInicio, 0px)), calc(-50% + 20px)) rotate(0deg);   opacity: 0; }
+  10%  { opacity: .9; }
+  100% { transform: translate(calc(-50% + var(--dxFin, 12px)),   calc(-50% - 60px)) rotate(180deg); opacity: .9; }
+}
+
+@keyframes glitter-twinkle{
+  0%   { opacity:.45; transform: scale(0.85); }
+  100% { opacity:.95; transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .glitter .s{ animation:none; }
+  .glitter .s::before{ animation:none; opacity:.6; }
+}
+
+
 
 
 /* =========================
