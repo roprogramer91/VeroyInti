@@ -23,6 +23,24 @@
 
   <link rel="stylesheet" href="styles.css" />
 </head>
+
+<!-- Música de fondo -->
+<audio id="bgm" preload="auto" loop playsinline>
+  <!-- poné tus archivos en /audio/ -->
+  <source src="audio/tema.mp3" type="audio/mpeg">
+  <source src="audio/tema.ogg" type="audio/ogg">
+</audio>
+
+<!-- Botón flotante de música (aparece solo si hace falta) -->
+<button id="music-toggle" class="music-btn" aria-label="Reproducir música" hidden>
+  <!-- ícono play -->
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M8 5v14l11-7-11-7z" fill="currentColor"/>
+  </svg>
+</button>
+
+
+
 <body>
 
   <!-- CONTENEDOR SNAP -->

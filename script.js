@@ -474,3 +474,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
   io.observe(section);
 })();
+
+
+// === Música de fondo con fallback a botón flotante ===
+(function setupBgm(){
+  const audio = document.getElementById('bgm');
+  if (!audio) return;
+
+  const btn = document.getElementById('music-toggle');
+
+  // intenta autoplay al cargar
+  const tryAutoplay = () =>
+    audio.play().then(() => {
+      // éxito: opcionalmente marcá el botón como "activo" y dejalo oculto
+      if (btn) { btn.setAttribute('aria-pressed','true'); btn.hidden = true; }
+    }).catch(() => {
+      // bloqueado: mostrar botón y esperar primer gesto
+      if (btn) btn.hidden = false;
+
+      const kick = () => {
+        audio.play().then(() => {
+          if (btn) { btn.setAttribute('aria-pressed','true'); }
+          window.removeEventListener('click', kick, true);
+          window.removeEventListener('touchend', kick, true);
+        }).catch(()=>{/* si vuelve a fallar, el usuario puede tocar el botón */});
+      };
+      window.addEventListener('click', kick, true);
+      window.addEventListener('touchend', kick, true);
+    });
+
+  // Llamar cuando los metadatos están listos (mejor para iOS)
+  if (audio.readyState >= 1) tryAutoplay(); else audio.addEventListener('loadedmetadata', tryAutoplay, {once:true});
+
+  // Toggle manual (play/pausa)
+  if (btn){
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play().then(()=> btn.setAttribute('aria-pressed','true'));
+      } else {
+        audio.pause();
+        btn.setAttribute('aria-pressed','false');
+      }
+    });
+  }
+
+  // Pausa cuando la pestaña no está visible (ahorra batería)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) audio.pause();
+    // opcional: no reanudar solo; el usuario toca otra vez si quiere
+  });
+})();

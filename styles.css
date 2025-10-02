@@ -473,6 +473,40 @@ body{
 /* Ampersand dorado reutilizable */
 .amp{ color: var(--gold); }
 
+
+/* =========================
+   Botón música
+   ========================= */
+/* Botón flotante para iniciar/pausar música – ARRIBA A LA DERECHA */
+.music-btn{
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));     /* respeta notch */
+  right: calc(12px + env(safe-area-inset-right)); /* respeta bordes curvos */
+  left: auto;
+  bottom: auto;
+
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gold);
+  background: #fff;
+  color: #7a5d12;
+  box-shadow: 0 8px 20px rgba(212,175,55,.18), 0 2px 6px rgba(0,0,0,.08);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.music-btn[aria-pressed="true"]{
+  background: linear-gradient(180deg,var(--gold),#c7ae68);
+  color:#fff;
+}
+
+
+
+
 /* =========================
    FIN
    ========================= */
