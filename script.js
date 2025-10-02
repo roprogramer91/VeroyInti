@@ -21,7 +21,7 @@ const CONFIG = {
   // Lugares
   ceremony: {
     time: "13:30",
-    place: "Registro Civil - Patricios argentinas - 277"
+    place: "Registro Civil - Av. Patricias argentinas - 277"
   },
   party: {
     time: "15:00",
@@ -47,6 +47,13 @@ const CONFIG = {
     btnVeroText: "Escribir a Vero",
     btnIntiText: "Escribir a Inti"
   },
+
+  maps: {
+  ceremony: "https://www.google.com/maps/place/Registro+Civil+Caballito/@-34.6059176,-58.4332021,19.25z/data=!4m6!3m5!1s0x95bcca6eeafb4bf3:0xfbb3488782f0459c!8m2!3d-34.6058264!4d-58.4328144!16s%2Fg%2F11flt2yfms?entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D",
+  
+  party:    "https://www.google.com/maps/place/Guardia+Vieja+3732,+C1192+Cdad.+Aut%C3%B3noma+de+Buenos+Aires/@-34.6014386,-58.4180171,18z/data=!3m1!4b1!4m6!3m5!1s0x95bcca89e7441971:0xc077e8274bee4d35!8m2!3d-34.6014405!4d-58.4169345!16s%2Fg%2F11cph0n6cc?entry=ttu&g_ep=EgoyMDI1MDkyOS4wIKXMDSoASAFQAw%3D%3D" // reemplazá por el real
+},
+
 
   /* =========================
      ICONOS POR SECCIÓN
@@ -105,6 +112,13 @@ const CONFIG = {
     inti.href = `https://wa.me/${cfg.whatsapp.intiNumber}?text=${msg}`;
     inti.textContent = cfg.whatsapp.btnIntiText || "Escribir a Inti";
   }
+
+    // Botones "Cómo llegar"
+  const cerMap = document.getElementById("btn-ceremony-map");
+  const parMap = document.getElementById("btn-party-map");
+  if (cerMap && CONFIG.maps?.ceremony) cerMap.href = CONFIG.maps.ceremony;
+  if (parMap && CONFIG.maps?.party)    parMap.href = CONFIG.maps.party;
+
 })(CONFIG);
 
 /* =========================
