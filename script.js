@@ -3,12 +3,13 @@
    ========================= */
 const CONFIG = {
   kicker: "¡Nos casamos!",
-  couple: "Vero & Inti",
+  // nombre en 3 líneas
+  coupleHtml: "Vero<br><span class='amp'>e</span><br>Inti",
   dateInline: "24 octubre del 2025",
 
   // Frase
   quote:
-    "La historia comienza cuando dos personas que ni soñaban conocerse terminan encontrándose en el instante menos esperado, pero en el momento indicado.",
+    "La historia comienza cuando dos personas que ni soñaban conocerse terminan reencontrándose en el instante menos esperado, pero en el momento indicado.",
 
   // Fecha visible y destino del contador
   dateTitle: "24 octubre del 2025",
@@ -23,8 +24,8 @@ const CONFIG = {
     place: "Registro Civil - Patricios argentinas - 277"
   },
   party: {
-    time: "Después del acto civil",
-    place: "guardia vieja - 3732"
+    time: "15:00",
+    place: "Guardia vieja - 3732"
   },
 
   // Vestimenta
@@ -35,7 +36,7 @@ const CONFIG = {
 
   // Aviso
   notice:
-    "Adoramos a sus hijos, pero creemos que necesitan una noche libre. Será solo adultos. ¡Gracias por entender! ♥",
+    "Adoramos a sus hijos, pero creemos que necesitan una tarde libre. Será solo adultos. ¡Gracias por entender! ♥",
 
   // WhatsApp (usar 54 + código de área sin 0 + número sin 15)
   whatsapp: {
@@ -68,8 +69,13 @@ const CONFIG = {
     if (el && text != null) el.textContent = text;
   };
 
+  // permitir HTML para poder usar <br> y colorear la “e”
+  const coupleEl = document.getElementById("couple");
+  if (coupleEl){
+    coupleEl.innerHTML = cfg.coupleHtml || cfg.couple;
+    }
+
   set("kicker", cfg.kicker);
-  set("couple", cfg.couple);
   set("date-inline", cfg.dateInline);
   set("quote-text", cfg.quote);
   set("date-title", cfg.dateTitle);
@@ -103,7 +109,7 @@ const CONFIG = {
 
 /* =========================
    FONDOS POR SECCIÓN (data-bg / data-bg-mobile / data-veil)
-   (ahora también incluye al footer porque matchea .snap-child)
+   (incluye footer porque matchea .snap-child)
    ========================= */
 (function applyBackgrounds(){
   const isMobile = window.matchMedia("(max-width: 640px)").matches;
@@ -140,7 +146,7 @@ const CONFIG = {
 (function injectSectionIcons(cfg){
   const applyHostStylesFromData = (host) => {
     if (!host) return;
-    const sz = host.getAttribute("data-size");
+    const sz  = host.getAttribute("data-size");
     const col = host.getAttribute("data-color");
     if (sz){
       const hasUnit = /[a-z%]+$/i.test(sz);
@@ -232,6 +238,65 @@ const CONFIG = {
   mount("icon-ninos",      pick(cfg.icons.ninos,      svgs.baby));
   mount("icon-rsvp",       pick(cfg.icons.rsvp,       svgs.heart));
 })(CONFIG);
+
+/* =========================
+   BOTONES “CÓMO LLEGAR” (Maps) — versión anti-duplicados
+   ========================= */
+(function addDirectionsButtonsOnce(){
+  // Evita correr dos veces si el script se evalúa de nuevo
+  if (document.body.dataset.mapsButtonsReady === "1") return;
+  document.body.dataset.mapsButtonsReady = "1";
+
+  function ensureButtonFor(placeId, btnId) {
+    const placeEl = document.getElementById(placeId);
+    if (!placeEl) return;
+
+    const place = placeEl.textContent.trim();
+    if (!place) return;
+
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`;
+    const card = placeEl.closest('.card');
+    if (!card) return;
+
+    // Si ya procesamos esta card en una corrida anterior, salimos
+    if (card.dataset.mapsProcessed === "1") {
+      // Igual actualizamos el href si el botón existe
+      const existing = card.querySelector(`#${btnId}`);
+      if (existing) existing.href = mapsUrl;
+      return;
+    }
+
+    // Contenedor de acciones
+    let actions = card.querySelector('.card-actions');
+    if (!actions){
+      actions = document.createElement('div');
+      actions.className = 'card-actions';
+      card.appendChild(actions);
+    }
+
+    // Eliminar cualquier duplicado previo (por hot reloads)
+    actions.querySelectorAll('.btn-maps').forEach(b => b.remove());
+
+    // Crear/actualizar botón único
+    let btn = actions.querySelector(`#${btnId}`);
+    if (!btn){
+      btn = document.createElement('a');
+      btn.id = btnId;
+      btn.className = 'btn sm outline btn-maps';
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+      btn.textContent = 'Cómo llegar';
+      actions.appendChild(btn);
+    }
+    btn.href = mapsUrl;
+
+    // marcar card como procesada
+    card.dataset.mapsProcessed = "1";
+  }
+
+  ensureButtonFor('ceremony-place', 'btn-maps-ceremony');
+  ensureButtonFor('party-place',    'btn-maps-party');
+})();
 
 /* =========================
    COUNTDOWN
@@ -354,20 +419,19 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!fbg){
     fbg = document.createElement('div');
     fbg.className = 'footer-bg';
-    // que quede detrás del contenido
     footer.prepend(fbg);
   }
 
-  // tomar la misma imagen declarada en data-bg / data-bg-mobile
-  const isMobile = window.matchMedia("(max-width: 640px)").matches;
+  // tomar la misma imagen declarada en data-bg / data-bg-mobile si las usás
+  const isMobile  = window.matchMedia("(max-width: 640px)").matches;
   const urlMobile = footer.getAttribute("data-bg-mobile");
-  const url = (isMobile && urlMobile) ? urlMobile : footer.getAttribute("data-bg");
+  const url       = (isMobile && urlMobile) ? urlMobile : footer.getAttribute("data-bg");
   if (url) fbg.style.backgroundImage = `url('${url}')`;
 
   // arrancar animación
   fbg.classList.add('kenburns');
 
-  // reiniciar animación cada vez que el footer vuelve a ocupar casi toda la vista
+  // reiniciar animación cuando vuelve a ocupar casi toda la vista
   if ('IntersectionObserver' in window){
     const restart = () => {
       fbg.classList.remove('kenburns');

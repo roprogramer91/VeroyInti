@@ -98,7 +98,7 @@ body{
   font-family:"Cormorant Garamond",serif;
   font-style:italic;
   font-weight:600;
-  font-size:clamp(22px,2.8vw,36px);
+  font-size:clamp(42px,2.8vw,36px);
   text-align:center;
   margin:0 0 var(--space-2);
   color:#111;
@@ -128,18 +128,24 @@ body{
   background: linear-gradient(to bottom,rgba(0,0,0,.18),rgba(0,0,0,.55)), var(--veil);
   z-index:1;
 }
-.hero-content{position:relative;color:#fff;padding-inline:var(--space-3); z-index:4;}
-.kicker{letter-spacing:.18em;text-transform:uppercase;font-size:clamp(.78rem,1.6vw,.95rem);opacity:.95;margin:0 0 var(--space-1)}
+.hero-content{position:relative;color:#fff;padding-inline:var(--space-3); z-index:4;padding-top: clamp(90px, 22vh, 200px);
+  display: grid;
+  place-items: center;                 /* centrado horizontal */
+  gap: clamp(8px, 1.8vw, 16px);}
+
+.kicker{letter-spacing:.18em;text-transform:uppercase;font-size:clamp(.28rem, 6.6vw, 2.50rem);opacity:.95;margin:0 0 var(--space-6)}
 .couple{
   font-family:"Great Vibes",cursive;
   font-weight:400;
-  font-size:clamp(52px,10vw,108px);
+  font-size:clamp(70px,20vw,158px);
   letter-spacing:.5px;
   line-height:1.05;
   margin:0 0 var(--space-1)
 }
 .couple span{color:var(--gold);filter:drop-shadow(0 1px 0 rgba(0,0,0,.05))}
 .date-inline{font-weight:400;font-size:clamp(.95rem,2.4vw,1.05rem);opacity:.9;border-top:1px solid rgba(255,255,255,.25);display:inline-block;padding-top:var(--space-1)}
+
+.hero .snap-child{justify-content: flex-start;}
 
 /* ==== Fade blanco al pie de la portada ==== */
 .hero::after{
@@ -218,7 +224,7 @@ body{
   font-family:"Cormorant Garamond",serif;
   font-style:italic;
   font-weight:400;
-  font-size:clamp(1.05rem,2.5vw,1.35rem);
+  font-size:clamp(1.80rem,2.5vw,2.35rem);
 }
 
 /* =========================
@@ -236,10 +242,33 @@ body{
    ========================= */
 .cards{display:grid;gap:var(--space-2);grid-template-columns:1fr}
 @media(min-width:680px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-m);padding:var(--space-3);box-shadow:var(--shadow-1)}
-.card-title{margin:0 0 var(--space-1);font-size:clamp(1.05rem,2.4vw,1.2rem);font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:8px}
-.card-title::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-left:8px;opacity:.6}
-.time-place{margin:.25rem 0 0;color:#333;line-height:1.6}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius-m);
+  padding:var(--space-3);
+  box-shadow:var(--shadow-1)
+}
+.card-title{
+  margin:0 0 var(--space-1);
+  font-size:clamp(1.05rem,2.4vw,1.2rem);
+  font-weight:600;color:#1a1a1a;
+  display:flex;align-items:center;gap:8px;
+  font-style:italic;
+}
+.card-title::after{
+  content:"";flex:1 1 auto;height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  margin-left:8px;opacity:.6
+}
+.time-place{margin:.25rem 0 0;color:#333;line-height:1.6;font-style: italic;}
+
+/* Acciones en las cards (Cómo llegar) */
+.card-actions{
+  margin-top: var(--space-2);
+  display: flex;
+}
+.card-actions .btn{ width: 100%; }
 
 /* =========== Vestimenta =========== */
 .dress{
@@ -268,12 +297,13 @@ body{
   color: var(--muted);
   font-size: .95rem;
   word-break: break-word;
+  font-style: italic;
 }
 
 /* =========================
    Aviso sin niños
    ========================= */
-.notice{text-align:center;margin:0;background:#fff9e9;border:1px solid #ffe8a3;color:#674d00;padding:var(--space-3);border-radius:var(--radius-m);box-shadow:var(--shadow-1)}
+.notice{text-align:center;margin:0;background:#fff9e9;border:1px solid #ffe8a3;color:#674d00;padding:var(--space-3);border-radius:var(--radius-m);box-shadow:var(--shadow-1);font-style: italic;}
 .notice strong{color:#3d2f00}
 
 /* =========================
@@ -283,15 +313,26 @@ body{
   display:inline-block;border-radius:999px;padding:12px 20px;min-height:44px;
   border:2px solid var(--gold);
   background:linear-gradient(180deg,var(--gold),#c7ae68);
-  color:#fff;text-decoration:none;font-weight:600;
+  color:#fff;text-decoration:none;font-weight:600;text-align:center;
   transition:transform .08s ease,box-shadow .2s ease,opacity .2s ease;
-  box-shadow:0 6px 18px rgba(212,175,55,.28);text-align:center
+  box-shadow:0 6px 18px rgba(212,175,55,.28);
 }
 .btn:hover{transform:translateY(-1px)}
 .btn:active{transform:translateY(0)}
 .btn.outline{background:#fff;color:#7a5d12;border-color:var(--gold)}
+/* Tamaño mini para “Cómo llegar” */
+.btn.sm{
+  padding:10px 16px;
+  min-height:40px;
+  font-size:.95rem;
+  box-shadow:0 4px 14px rgba(212,175,55,.22);
+}
+
 .rsvp-buttons{display:flex;gap:var(--space-2);justify-content:center;flex-wrap:wrap}
 .rsvp-buttons .btn{flex:1 1 220px;max-width:320px}
+
+.sub {font-style: italic;}
+
 
 /* =========================
    Footer
@@ -304,10 +345,20 @@ body{
   justify-content:center;
   color:#fff;                    /* texto blanco */
   text-shadow:0 1.5px 3px rgba(0,0,0,.55);
-  font-size:35px;
-  position: relative;       /* para posicionar el bg */
-  overflow: hidden;   
+  font-size:55px;
+  position: relative;            /* para posicionar el bg */
+  overflow: hidden;
 }
+
+.footer p{
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+  font-style: normal;         /* o italic si querés aún más inclinada */
+  letter-spacing: .5px;       /* opcional: separa un pelín */
+  line-height: 1.1;           /* compacto y elegante */
+}
+
+
 .footer span{ color:var(--gold); text-shadow:0 1.5px 3px rgba(0,0,0,.55) }
 
 /* SIN CHIP: contenedor sin fondo ni blur */
@@ -322,6 +373,7 @@ body{
   backdrop-filter:none;
 }
 
+/* Fondo del footer + Ken Burns */
 .footer-bg{
   position: absolute;
   inset: 0;
@@ -330,6 +382,9 @@ body{
   transform-origin: center center;
   will-change: transform;
   z-index: 0;               /* por debajo del texto */
+}
+.footer-bg.kenburns{
+  animation: hero-zoom-in 18s ease-out forwards;
 }
 
 /* Velo suave como en la portada (opcional) */
@@ -342,11 +397,6 @@ body{
 
 /* El contenido del footer queda arriba del bg */
 .footer .container{ position: relative; z-index: 2; }
-
-/* Reutilizamos la animación existente */
-.footer-bg.kenburns{
-  animation: hero-zoom-in 18s ease-out forwards;
-}
 
 /* Respeta “reduce motion” */
 @media (prefers-reduced-motion: reduce){
